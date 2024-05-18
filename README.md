@@ -386,61 +386,37 @@ namespace BridgePatternRealTimeExample
     }
 }
 
- 
-
- 
-
 using System;
 namespace BridgePatternRealTimeExample
 {
-
     /** 
     This is going to be a concrete class which inherits from the Abstraction class i.e. AbstractMessage. This Concrete Abstraction Class implements the operations defined by AbstractMessage class.
     **/
 
     public class ShortMessage : AbstractMessage
     {
-
         //The constructor expected an argument of type object which implements the IMessageSender interface
 
         public ShortMessage(IMessageSender messageSender)
-
         {
-
             //Initialize the super class messageSender variable
 
             this.messageSender = messageSender;
-
         }
-
- 
 
         public override void SendMessage(string Message)
-
         {
-
             if (Message.Length <= 10)
-
             {
-
                 messageSender.SendMessage(Message);
-
             }
-
             else
-
             {
-
                 Console.WriteLine("Unable to send the message as length > 10 characters");
-
             }
-
         }
-
     }
-
 }
-
  
 namespace BridgePatternRealTimeExample
 {
@@ -493,6 +469,179 @@ namespace BridgePatternRealTimeExample
                 shortMessage.SendMessage(Message);
             }
  
+            Console.ReadKey();
+        }
+    }
+}
+
+```
+
+
+=================================================Facade Design Patter ============================================================
+
+Facade pattern hides the complexities of the system and provides an interface to the client using which the client can access the system. Facade is a structural design pattern that provides a simplified interface to a complex system making it easier to use.
+
+This pattern involves a single wrapper class which contains a set of members which are required by the client. These members access the system on behalf of the facade client and hide the implementation details.
+
+The facade design pattern is particularly used when a system is very complex or difficult to understand because the system has a large number of interdependent classes or its source code is unavailable.
+
+Facade Design pattern falls under Structural Pattern. The Facade design pattern is particularly used when a system is very complex or difficult to understand because the system has a large number of interdependent classes or its source code is unavailable.
+ 
+
+Example without using Facade Design Pattern
+ 
+```
+namespace FacadeDesignPatternRealTimeExample
+{
+    public class Customer
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string MobileNumber { get; set; }
+        public string Address { get; set; }
+        //Any other Properties as per the Business Requirements
+    }
+}
+
+
+using System;
+namespace FacadeDesignPatternRealTimeExample
+{
+    public class Validator
+    {
+        public bool ValidateCustomer(Customer customer)
+        {
+            //Need to Validate the Customer Object
+            Console.WriteLine("Customer Validated...");
+            Console.WriteLine($"Name:{customer.Name}");
+            Console.WriteLine($"Email:{customer.Email}");
+            Console.WriteLine($"Mobile:{customer.MobileNumber}");
+            Console.WriteLine($"Address:{customer.Address}");
+
+            return true;
+        }
+    }
+}
+
+using System;
+namespace FacadeDesignPatternRealTimeExample
+{
+    public class CustomerDataAccessLayer
+    {
+        public bool SaveCustomer(Customer customer)
+        {
+            //Save the Customer in the Database
+            Console.WriteLine("\nCustomer Saved into the Database...");
+
+            return true;
+        }
+    }
+}
+
+using System;
+namespace FacadeDesignPatternRealTimeExample
+{
+    public class Email
+    {
+        public bool SendRegistrationEmail(Customer customer)
+        {
+            //Send Registration Successful Email to Customer
+            Console.WriteLine("\nRegistration Email Send to Customer...");
+
+            return true;
+        }
+    }
+}
+
+ 
+using System;
+namespace FacadeDesignPatternRealTimeExample
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Step1: Create an Instance of Customer Class
+            Customer customer = new Customer()
+            {
+                Name = "Pranaya",
+                Email = info@dotnettutorials.net,
+                MobileNumber = "1234567890",
+                Address = "BBSR, Odisha, India"
+            };
+
+            //Step2: Validate the Customer
+            Validator validator = new Validator();
+            bool IsValid = validator.ValidateCustomer(customer);
+
+            //Step3: Save the Customer Object into the database
+            CustomerDataAccessLayer customerDataAccessLayer = new CustomerDataAccessLayer();
+            bool IsSaved = customerDataAccessLayer.SaveCustomer(customer);
+
+            //Step4: Send the Registration Email to the Customer
+            Email email = new Email();
+            email.SendRegistrationEmail(customer);
+
+            Console.ReadKey();
+        }
+    }
+}
+
+```
+
+**Problem with the above Design :**
+
+The problem is now we have many subsystems like Validator, CustomerDataAccessLayer, and Email. And the Client needs to follow the appropriate sequence to create and consume the objects of the above subsystems. And here, there is a high chance that the client might not follow the proper sequence, or the client might forget to use one of the subsystems.
+
+ 
+
+Implementing Facade Design Pattern:
+
+```
+namespace FacadeDesignPatternRealTimeExample
+{
+    public class CustomerRegistration
+    {
+        public bool RegisterCustomer(Customer customer)
+        {
+            //Step1: Validate the Customer
+            Validator validator = new Validator();
+            bool IsValid = validator.ValidateCustomer(customer);
+
+            //Step1: Save the Customer Object into the database
+            CustomerDataAccessLayer customerDataAccessLayer = new CustomerDataAccessLayer();
+            bool IsSaved = customerDataAccessLayer.SaveCustomer(customer);
+
+            //Step3: Send the Registration Email to the Customer
+            Email email = new Email();
+            email.SendRegistrationEmail(customer);
+
+            return true;
+        }
+    }
+}
+
+ 
+using System;
+namespace FacadeDesignPatternRealTimeExample
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Create an Instance of Customer Class
+            Customer customer = new Customer()
+            {
+                Name = "Pranaya",
+                Email = info@dotnettutorials.net,
+                MobileNumber = "1234567890",
+                Address = "BBSR, Odisha, India"
+            };
+
+            //Using Facade Class
+            CustomerRegistration customerRegistration = new CustomerRegistration();
+            customerRegistration.RegisterCustomer(customer);
+
             Console.ReadKey();
         }
     }
