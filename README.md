@@ -282,14 +282,15 @@ public class Director
 	
 }
 
-````
+```
 
-==================================Adapter Design Pattern============
+**==================================Adapter Design Pattern============**
 
 The Adapter design pattern converts the interface of a class into another interface clients expect. This design pattern lets classes work together that couldn‘t otherwise because of incompatible interfaces.
 
 The Adapter Design pattern is a structural pattern that allows object with incompatible interfaces to work together.It acts as bridge between the old and new interfaces, enabling them to collaborate seamlessly.
 
+```
 public interface IWeatherService
 {
     float GetTemperatureInCelsius();
@@ -315,8 +316,8 @@ public class FarenheitWeatherServiceAdapter : IWeatherService
     }
 
 }
-
-======================================================Bridge Design Patter =================================================
+```
+**======================================================Bridge Design Patter =================================================**
 
 The Bridge design pattern allows you to separate the abstraction from the implementation,so that the two can vary independently.
 
@@ -477,7 +478,7 @@ namespace BridgePatternRealTimeExample
 ```
 
 
-=================================================Facade Design Patter ============================================================
+**=================================================Facade Design Patter ============================================================**
 
 Facade pattern hides the complexities of the system and provides an interface to the client using which the client can access the system. Facade is a structural design pattern that provides a simplified interface to a complex system making it easier to use.
 
