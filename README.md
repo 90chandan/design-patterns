@@ -875,3 +875,137 @@ namespace DecoratorDesignPatternRealTimeExample
 }
 
 ```
+**=================================================Explain Circuit Breaker Design Pattern in Microservices ? ======================**
+**Circuit Breaker Pattern Overview**
+The circuit breaker pattern works similarly to an electrical circuit breaker. It monitors for failures in a service call and, when certain thresholds are met, it "trips" the breaker to prevent further calls to the failing service. This allows the failing service time to recover, and avoids overloading it with additional requests.
+
+The circuit breaker has three states:
+-- **Closed:** Requests are allowed to pass through. If the requests succeed, the circuit remains closed.
+--  **Open:** Requests are blocked and an error is returned immediately without attempting the call. This state is triggered when a threshold of failures is reached.
+-- **Half-Open:** A limited number of test requests are allowed through to see if the service has recovered. If these requests succeed, the circuit breaker resets to the closed state. If they fail, the circuit breaker returns to the open state.
+
+**Implementing Circuit Breaker in .NET Core**
+In .NET Core, you can implement the circuit breaker pattern using the Polly library. Polly is a .NET resilience and transient fault-handling library that allows you to express policies such as Retry, Circuit Breaker, Timeout, Bulkhead Isolation, and Fallback.
+
+**Steps to Implement Circuit Breaker with Polly**
+-- Install Polly NuGet Package:
+First, install the Polly NuGet package in your .NET Core project:
+
+```
+dotnet add package Polly
+
+```
+-- Configure Circuit Breaker Policy:
+Define a circuit breaker policy in your code. This policy specifies the number of exceptions allowed before opening the circuit, the duration the circuit remains open, and the actions to take on transitions.
+```
+using Polly;
+using Polly.CircuitBreaker;
+
+// Define a circuit breaker policy
+var circuitBreakerPolicy = Policy
+    .Handle<Exception>()
+    .CircuitBreakerAsync(
+        exceptionsAllowedBeforeBreaking: 3,
+        durationOfBreak: TimeSpan.FromSeconds(30),
+        onBreak: (exception, timespan) => {
+            // Code to run when the circuit breaks
+            Console.WriteLine("Circuit broken!");
+        },
+        onReset: () => {
+            // Code to run when the circuit resets
+            Console.WriteLine("Circuit reset!");
+        },
+        onHalfOpen: () => {
+            // Code to run when the circuit is half-open
+            Console.WriteLine("Circuit half-open, testing...");
+        });
+
+```
+-- Use Circuit Breaker Policy in Your HTTP Calls:
+Apply the circuit breaker policy to your HTTP calls. You can wrap your HttpClient calls with the circuit breaker policy.
+```
+using System.Net.Http;
+using System.Threading.Tasks;
+
+public class ApiService
+{
+    private readonly HttpClient _httpClient;
+    private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy;
+
+    public ApiService(HttpClient httpClient, AsyncCircuitBreakerPolicy circuitBreakerPolicy)
+    {
+        _httpClient = httpClient;
+        _circuitBreakerPolicy = circuitBreakerPolicy;
+    }
+
+    public async Task<string> GetDataAsync(string url)
+    {
+        return await _circuitBreakerPolicy.ExecuteAsync(async () => {
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        });
+    }
+}
+
+```
+-- Register Services in Dependency Injection:
+Register your HttpClient and ApiService with dependency injection in the Startup class.
+
+```
+using Microsoft.Extensions.DependencyInjection;
+
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddHttpClient<ApiService>()
+            .AddPolicyHandler(circuitBreakerPolicy);
+    }
+}
+
+```
+**Example Usage**
+Here’s how you might use the ApiService in a controller:
+```
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+
+public class MyController : ControllerBase
+{
+    private readonly ApiService _apiService;
+
+    public MyController(ApiService apiService)
+    {
+        _apiService = apiService;
+    }
+
+    [HttpGet("data")]
+    public async Task<IActionResult> GetData()
+    {
+        try
+        {
+            var data = await _apiService.GetDataAsync("https://api.example.com/data");
+            return Ok(data);
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions, e.g., log error and return appropriate response
+            return StatusCode(500, "Internal server error");
+        }
+    }
+}
+
+```
+Benefits
+-- Resilience: Prevents cascading failures by stopping calls to services that are down.
+-- Recovery: Allows services to recover gracefully without being overwhelmed.
+-- Monitoring: Provides hooks to monitor the state and behavior of service calls.
+By implementing the circuit breaker pattern with Polly in .NET Core, you can significantly enhance the reliability and resilience of your microservice architecture.
+
+
+
+
+
+
+
