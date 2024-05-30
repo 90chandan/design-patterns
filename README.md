@@ -1,24 +1,36 @@
 # design-patterns
-Creational Design Pattern -Creational design patterns solve the problems related to object creation. They help to abstract away object creation processes that spread across multiple classes.
+1. Creational Design Pattern -Creational design patterns solve the problems related to object creation. They help to abstract away object creation processes that spread across multiple classes.
 
-a.Singleton
-b.Factory Method
-c.Abstract Factory
-d.Builder
-e.Prototype
+1. Singleton
+2. Factory Method
+3. Abstract Factory
+4. Builder
+4. Prototype
 
 
-2.Structural Design Patterns : The structural design patterns suggest implementing relationships between classes and objects.
+2. Structural Design Patterns : The structural design patterns suggest implementing relationships between classes and objects.
 
-a.Adapter
-b.Bridgec
-c.Composite
-d.Decorator
-f.Facade
-g.Flyweight
-h.Proxy
+1. Adapter
+2. Bridgec
+3. Composite
+4. Decorator
+5. Facade
+6. Flyweight
+7. Proxy
 
  
+ 3. Behavioural Design Patterns
+
+ 1. Chain of Responsibility
+ 2. Comman
+ 3. Iterator
+ 4. Mediator
+ 5. Memento
+ 6. Observer
+ 7. State
+ 9. Stategy
+ 10. Template Method
+ 11. Visitor
 
 **===================singleTon Design Patter =============================**
 
