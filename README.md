@@ -20,8 +20,8 @@ h.Proxy
 
  
 
-===================singleTon Design Patter =============================
-
+**===================singleTon Design Patter =============================**
+```
 public sealed class SingleTon
 {
     private static SingleTon _instance = null;
@@ -41,15 +41,15 @@ public sealed class SingleTon
         }   
     }
 } 
-
-======================C# Factory Method Design Pattern======================
+```
+**======================C# Factory Method Design Pattern======================**
 
 The Factory Method design pattern defines an interface for creating an object, but let subclasses decide which class to instantiate. This pattern lets a class defer instantiation to subclasses.
 
 
 Factory Method is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
 
-
+```
 public interface INotification
 {
     void SendNotification();
@@ -109,12 +109,13 @@ class Program {
         smsNotification.SendNotification();
     }
 }
+```
 
-
-===============Abstract Factory===================
+**===============Abstract Factory===================**
 
 The Abstract Factory design pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
 
+```
 public interface INotification
 {
     void Send();
@@ -171,8 +172,8 @@ class Program
     INotification smsNotification = notificationFactory.createSMSNotification();
     smsNotification.Send();
 }
-
-===================================Builder design pattern===========================================
+```
+**===================================Builder design pattern===========================================**
 
 The Builder design pattern separates the construction of a complex object from its representation so that the same construction process can create different representations.
 
@@ -555,6 +556,7 @@ namespace FacadeDesignPatternRealTimeExample
 }
 
  
+            Customer customer = new Customer()
 using System;
 namespace FacadeDesignPatternRealTimeExample
 {
@@ -563,7 +565,6 @@ namespace FacadeDesignPatternRealTimeExample
         static void Main(string[] args)
         {
             //Step1: Create an Instance of Customer Class
-            Customer customer = new Customer()
             {
                 Name = "Pranaya",
                 Email = info@dotnettutorials.net,
