@@ -25,10 +25,10 @@ h.Proxy
 Singleton is a class that allows only a single instance of itself to be created.
 
 Advantages of Singleton Design Pattern
--- Singleton pattern can implement interfaces.
--- Can be lazy-loaded and has Static Initialization.
---- It helps to hide dependencies.
---- It provides a single point of access to a particular instance, so it is easy to maintain.
+* Singleton pattern can implement interfaces.
+* Can be lazy-loaded and has Static Initialization.
+* It helps to hide dependencies.
+* It provides a single point of access to a particular instance, so it is easy to maintain.
 
 Disadvantages of Singleton Design Pattern
 -- Unit testing is a bit difficult as it introduces a global state into an application
