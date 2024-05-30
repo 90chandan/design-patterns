@@ -21,7 +21,26 @@ h.Proxy
  
 
 **===================singleTon Design Patter =============================**
+
+Singleton is a class that allows only a single instance of itself to be created.
+
+Advantages of Singleton Design Pattern
+-- Singleton pattern can implement interfaces.
+-- Can be lazy-loaded and has Static Initialization.
+--- It helps to hide dependencies.
+--- It provides a single point of access to a particular instance, so it is easy to maintain.
+
+Disadvantages of Singleton Design Pattern
+-- Unit testing is a bit difficult as it introduces a global state into an application
+-- Reduces the potential for parallelism within a program by locking.
+
+The following compares Singleton class vs. Static methods,
+-- A Static Class cannot be extended whereas a singleton class can be extended.
+-- A Static Class cannot be initialized whereas a singleton class can be.
+-- A Static class is loaded automatically by the CLR when the program containing the class is loaded.
+
 ```
+
 public sealed class SingleTon
 {
     private static SingleTon _instance = null;
@@ -38,18 +57,18 @@ public sealed class SingleTon
                 }
                 return _instance;
             }
-        }   
     }
 } 
+
 ```
 **======================C# Factory Method Design Pattern======================**
 
 The Factory Method design pattern defines an interface for creating an object, but let subclasses decide which class to instantiate. This pattern lets a class defer instantiation to subclasses.
 
-
 Factory Method is a creational design pattern that provides an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created.
 
 ```
+
 public interface INotification
 {
     void SendNotification();
@@ -109,6 +128,7 @@ class Program {
         smsNotification.SendNotification();
     }
 }
+
 ```
 
 **===============Abstract Factory===================**
@@ -172,6 +192,7 @@ class Program
     INotification smsNotification = notificationFactory.createSMSNotification();
     smsNotification.Send();
 }
+
 ```
 **===================================Builder design pattern===========================================**
 
@@ -292,6 +313,7 @@ The Adapter design pattern converts the interface of a class into another interf
 The Adapter Design pattern is a structural pattern that allows object with incompatible interfaces to work together.It acts as bridge between the old and new interfaces, enabling them to collaborate seamlessly.
 
 ```
+
 public interface IWeatherService
 {
     float GetTemperatureInCelsius();
@@ -317,6 +339,7 @@ public class FarenheitWeatherServiceAdapter : IWeatherService
     }
 
 }
+
 ```
 **======================================================Bridge Design Patter =================================================**
 
@@ -779,10 +802,10 @@ namespace DecoratorDesignPatternRealTimeExample
         {
         }
 
-        //Overriding the MakePizza method to Chicken
 
         public override string MakePizza()
         {
+        //Overriding the MakePizza method to Chicken
             //First Call the Concrete Components MakePizza Method and then the AddChicken method
 
             return pizza.MakePizza() + AddChicken();
