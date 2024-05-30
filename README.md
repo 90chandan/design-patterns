@@ -31,13 +31,13 @@ Advantages of Singleton Design Pattern
 * It provides a single point of access to a particular instance, so it is easy to maintain.
 
 Disadvantages of Singleton Design Pattern
--- Unit testing is a bit difficult as it introduces a global state into an application
--- Reduces the potential for parallelism within a program by locking.
++ Unit testing is a bit difficult as it introduces a global state into an application
++ Reduces the potential for parallelism within a program by locking.
 
 The following compares Singleton class vs. Static methods,
--- A Static Class cannot be extended whereas a singleton class can be extended.
--- A Static Class cannot be initialized whereas a singleton class can be.
--- A Static class is loaded automatically by the CLR when the program containing the class is loaded.
+- A Static Class cannot be extended whereas a singleton class can be extended.
+- A Static Class cannot be initialized whereas a singleton class can be.
+- A Static class is loaded automatically by the CLR when the program containing the class is loaded.
 
 ```
 
