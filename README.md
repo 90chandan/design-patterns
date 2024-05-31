@@ -317,6 +317,92 @@ public class Director
 }
 
 ```
+**==============================================Prototype Design Pattern=================================================**
+
+* The Prototype design pattern is a creational pattern that enables the creation of new objects by copying an existing object, known as the prototype. This pattern is useful when creating a new object is costly or complex.
+* The Prototype pattern is typically implemented by creating a Clone method in the prototype class. This method creates a new instance of the class and copies the data from the original instance to the new one.
+
+**Example: Document Cloning**
+Consider a scenario where you have different types of documents (e.g., resumes, reports) that share some common properties but also have their specific details. Creating each document from scratch every time is costly, so you can use the Prototype pattern to clone existing documents and then modify them as needed.
+
+```
+public interface IDocumentPrototype
+{
+    IDocumentPrototype Clone();
+}
+
+
+public class Document : IDocumentPrototype
+{
+    public string Title { get; set; }
+    public string Content { get; set; }
+
+    public Document(string title, string content)
+    {
+        Title = title;
+        Content = content;
+    }
+
+    public virtual IDocumentPrototype Clone()
+    {
+        return new Document(Title, Content);
+    }
+
+    public override string ToString()
+    {
+        return $"Title: {Title}, Content: {Content}";
+    }
+}
+
+public class Resume : Document
+{
+    public string CandidateName { get; set; }
+    public string Experience { get; set; }
+
+    public Resume(string title, string content, string candidateName, string experience)
+        : base(title, content)
+    {
+        CandidateName = candidateName;
+        Experience = experience;
+    }
+
+    public override IDocumentPrototype Clone()
+    {
+        return new Resume(Title, Content, CandidateName, Experience);
+    }
+
+    public override string ToString()
+    {
+        return $"Title: {Title}, Content: {Content}, Candidate Name: {CandidateName}, Experience: {Experience}";
+    }
+}
+
+
+public class Program
+{
+    public static void Main()
+    {
+        // Create an original resume
+        Resume originalResume = new Resume("John Doe's Resume", "Experience in software development...", "John Doe", "5 years");
+
+        // Clone the original resume
+        Resume clonedResume = (Resume)originalResume.Clone();
+
+        // Modify the cloned resume
+        clonedResume.CandidateName = "Jane Doe";
+        clonedResume.Experience = "3 years in data science";
+
+        // Display the resumes
+        Console.WriteLine("Original Resume:");
+        Console.WriteLine(originalResume);
+
+        Console.WriteLine("\nCloned Resume:");
+        Console.WriteLine(clonedResume);
+    }
+}
+
+
+```
 
 **==================================Adapter Design Pattern============**
 
