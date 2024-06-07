@@ -897,7 +897,7 @@ namespace DecoratorDesignPatternRealTimeExample
         //Also pass the same existing pizza object to the base constructor
 
         public ChickenPizzaDecorator(Pizza pizza) : base(pizza)
-        {
+         {
         }
 
 
@@ -997,6 +997,152 @@ namespace DecoratorDesignPatternRealTimeExample
 }
 
 ```
+**=====================================================FlyWeight Design Pattern ==================================**
+The Flyweight design pattern is a structural pattern aimed at minimizing memory usage by sharing as much data as possible with similar objects. This pattern is particularly useful when dealing with a large number of objects that share a substantial amount of data, thus allowing for efficient memory usage.
+
+Here's a detailed explanation of the Flyweight pattern in C#, including an example:
+
+Key Concepts
+- Flyweight: An interface or abstract class declaring methods that can be used by the flyweights.
+- ConcreteFlyweight: Implements the Flyweight interface and adds storage for intrinsic state. Instances of ConcreteFlyweight are shared.
+- UnsharedConcreteFlyweight: Not all Flyweight subclasses need to be shared. The Flyweight interface enables sharing but does not enforce it.
+- FlyweightFactory: Creates and manages Flyweight objects, ensuring that flyweights are shared properly. When a client requests a flyweight, the factory provides an existing instance or creates one if none exists.
+- Client: Maintains references to flyweights and computes extrinsic state.
+
+**Example Scenario**
+Let's consider a scenario where we need to create a large number of Tree objects in a forest simulation. Each tree has intrinsic state (shared among trees, such as type, texture, etc.) and extrinsic state (unique to each tree, such as position).
+
+
+Step 1: Define the Flyweight Interface
+
+```
+public interface ITree
+{
+    void Display(int x, int y);
+}
+
+```
+Step 2: Implement the ConcreteFlyweight
+
+```
+public class TreeType : ITree
+{
+    private string name;
+    private string color;
+    private string texture;
+
+    public TreeType(string name, string color, string texture)
+    {
+        this.name = name;
+        this.color = color;
+        this.texture = texture;
+    }
+
+    public void Display(int x, int y)
+    {
+        Console.WriteLine($"Displaying tree of type {name} at ({x}, {y}) with color {color} and texture {texture}");
+    }
+}
+
+```
+
+
+Step 3: Implement the FlyweightFactory
+
+```
+public class TreeFactory
+{
+    private Dictionary<string, TreeType> treeTypes = new Dictionary<string, TreeType>();
+
+    public TreeType GetTreeType(string name, string color, string texture)
+    {
+        string key = $"{name}_{color}_{texture}";
+
+        if (!treeTypes.ContainsKey(key))
+        {
+            treeTypes[key] = new TreeType(name, color, texture);
+        }
+
+        return treeTypes[key];
+    }
+}
+
+```
+
+Step 4: Client Code to Use Flyweights
+
+```
+public class Tree
+{
+    private int x;
+    private int y;
+    private TreeType type;
+
+    public Tree(int x, int y, TreeType type)
+    {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+    }
+
+    public void Display()
+    {
+        type.Display(x, y);
+    }
+}
+
+public class Forest
+{
+    private List<Tree> trees = new List<Tree>();
+    private TreeFactory treeFactory = new TreeFactory();
+
+    public void PlantTree(int x, int y, string name, string color, string texture)
+    {
+        TreeType type = treeFactory.GetTreeType(name, color, texture);
+        Tree tree = new Tree(x, y, type);
+        trees.Add(tree);
+    }
+
+    public void DisplayTrees()
+    {
+        foreach (var tree in trees)
+        {
+            tree.Display();
+        }
+    }
+}
+
+```
+
+Step 5: Demonstrate Usage
+
+```
+class Program
+{
+    static void Main()
+    {
+        Forest forest = new Forest();
+
+        forest.PlantTree(1, 2, "Oak", "Green", "Rough");
+        forest.PlantTree(2, 3, "Pine", "Green", "Smooth");
+        forest.PlantTree(1, 2, "Oak", "Green", "Rough"); // This will reuse the existing "Oak" tree type
+
+        forest.DisplayTrees();
+    }
+}
+
+```
+Explanation
+TreeType is the ConcreteFlyweight that stores intrinsic state (name, color, texture).
+TreeFactory is responsible for creating and managing the flyweights. It ensures that the same TreeType instance is reused whenever possible.
+Tree is a class that uses a TreeType flyweight and adds extrinsic state (x, y coordinates).
+Forest is the client that creates and uses Tree objects. It demonstrates how to plant trees and display them.
+By using the Flyweight pattern, we minimize memory usage by sharing TreeType objects instead of creating new ones for each tree, thus achieving efficiency when dealing with a large number of similar objects.
+
+
+**==========================================Composite Design Pattern=================================================**
+
+
 **=================================================Explain Circuit Breaker Design Pattern in Microservices ? ======================**
 **Circuit Breaker Pattern Overview**
 The circuit breaker pattern works similarly to an electrical circuit breaker. It monitors for failures in a service call and, when certain thresholds are met, it "trips" the breaker to prevent further calls to the failing service. This allows the failing service time to recover, and avoids overloading it with additional requests.
