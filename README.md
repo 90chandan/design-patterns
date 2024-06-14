@@ -1273,6 +1273,149 @@ By implementing the circuit breaker pattern with Polly in .NET Core, you can sig
 
 
 
+**===============================Proxy Design Pattern============================================**
+The Proxy Design Pattern is a structural design pattern that provides a surrogate or placeholder for another object to control access to it. This can be useful for various reasons such as lazy initialization, access control, logging, or remote access.
+
+Concept
+In the Proxy pattern, we have a Proxy class that represents the RealSubject class. The Proxy class controls access to the RealSubject class by implementing the same interface.
+
+```
+public interface ISubject
+{
+    void Request();
+}
+
+public class RealSubject : ISubject
+{
+    public void Request()
+    {
+        Console.WriteLine("RealSubject: Handling request.");
+    }
+}
+
+public class Proxy : ISubject
+{
+    private RealSubject _realSubject;
+
+    public void Request()
+    {
+        if (_realSubject == null)
+        {
+            _realSubject = new RealSubject();
+        }
+
+        Console.WriteLine("Proxy: Logging request.");
+        _realSubject.Request();
+    }
+}
+
+public class Client
+{
+    public void ClientCode(ISubject subject)
+    {
+        subject.Request();
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Client client = new Client();
+
+        Console.WriteLine("Client: Executing with a real subject:");
+        RealSubject realSubject = new RealSubject();
+        client.ClientCode(realSubject);
+
+        Console.WriteLine();
+
+        Console.WriteLine("Client: Executing with a proxy:");
+        Proxy proxy = new Proxy();
+        client.ClientCode(proxy);
+    }
+}
+
+```
+
+Benefits of Proxy Pattern
+- Lazy Initialization: The RealSubject is created only when it is needed.
+- Access Control: The Proxy can control access to the RealSubject.
+- Logging: The Proxy can log requests before passing them to the RealSubject.
+- Remote Proxy: Can be used to represent objects that are in different address spaces.
+
+**Scenario**
+Imagine we have a system that sends notifications to users. Sending a notification can be an expensive operation, so we want to control how and when notifications are sent. We can use the Proxy pattern to add this control.
+
+```
+public interface INotification
+{
+    void Send(string message);
+}
+
+public class RealNotification : INotification
+{
+    public void Send(string message)
+    {
+        Console.WriteLine($"RealNotification: Sending message - {message}");
+    }
+}
+
+public class NotificationProxy : INotification
+{
+    private RealNotification _realNotification;
+    private bool _hasPermission;
+
+    public NotificationProxy(bool hasPermission)
+    {
+        _hasPermission = hasPermission;
+    }
+
+    public void Send(string message)
+    {
+        if (_realNotification == null)
+        {
+            _realNotification = new RealNotification();
+        }
+
+        if (_hasPermission)
+        {
+            Console.WriteLine("NotificationProxy: Permission granted.");
+            _realNotification.Send(message);
+        }
+        else
+        {
+            Console.WriteLine("NotificationProxy: Permission denied.");
+        }
+    }
+}
+
+public class Client
+{
+    public void SendNotification(INotification notification, string message)
+    {
+        notification.Send(message);
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Client client = new Client();
+
+        Console.WriteLine("Client: Attempting to send notification with permission:");
+        NotificationProxy proxyWithPermission = new NotificationProxy(true);
+        client.SendNotification(proxyWithPermission, "Hello, user!");
+
+        Console.WriteLine();
+
+        Console.WriteLine("Client: Attempting to send notification without permission:");
+        NotificationProxy proxyWithoutPermission = new NotificationProxy(false);
+        client.SendNotification(proxyWithoutPermission, "Hello, user!");
+    }
+}
+
+```
 
 
 
